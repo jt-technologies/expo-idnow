@@ -3,8 +3,8 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "expo-idnow": ["../src/index"],
-      "expo-idnow/*": ["../src/*"]
+      "@j-tec/expo-idnow": ["../src/index"],
+      "@j-tec/expo-idnow/*": ["../src/*"]
     }
   }
 }

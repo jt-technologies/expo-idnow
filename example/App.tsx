@@ -1,13 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native'
 
-import * as ExpoIDnow from 'expo-idnow';
+import * as ExpoIDnow from '@j-tec/expo-idnow'
 
 export default function App() {
   return (
     <View style={styles.container}>
       <Text>{ExpoIDnow.hello()}</Text>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+})
