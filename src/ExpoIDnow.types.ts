@@ -1,7 +1,7 @@
 export type ChangeEventPayload = {
-  value: string;
-};
+  value: string
+}
 
 export type ExpoIDnowViewProps = {
-  name: string;
-};
+  name: string
+}
