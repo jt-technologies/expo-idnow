@@ -28,11 +28,15 @@
   "author": "Alex Rodriguez <alex.rodriguez@justtrade.com> ()",
   "license": "MIT",
   "homepage": "https://github.com/j-tec/expo-idnow#readme",
-  "dependencies": {},
   "devDependencies": {
     "@types/react": "^18.0.25",
+    "eslint-config-expo": "^7.1.2",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
     "expo-module-scripts": "^3.5.2",
-    "expo-modules-core": "^1.12.20"
+    "expo-modules-core": "^1.12.20",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4"
   },
   "peerDependencies": {
     "expo": "*",
