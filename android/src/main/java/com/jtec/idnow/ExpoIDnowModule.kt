@@ -1,47 +1,59 @@
 package com.jtec.idnow
 
+import de.idnow.core.IDnowConfig
+import de.idnow.core.IDnowResult
+import de.idnow.core.IDnowSDK
+import de.idnow.core.IDnowSDK.IDnowResultListener
+import expo.modules.kotlin.Promise
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
+import org.json.JSONObject
+
+data class ExpoIDnowResponse(val status: String, val resultType: IDnowResult.ResultType) {
+    private val result: String = when (resultType) {
+        IDnowResult.ResultType.CANCELLED -> "CANCELLED"
+        IDnowResult.ResultType.FINISHED -> "FINISHED"
+        IDnowResult.ResultType.ERROR -> "ERROR"
+        else -> "UNKNOWN"
+    }
+
+    fun toJsonString(): JSONObject {
+        val jsonObj = JSONObject()
+        jsonObj.put("status", status)
+        jsonObj.put("result", result)
+        return jsonObj
+    }
+}
 
 class ExpoIDnowModule : Module() {
-  // Each module class must implement the definition function. The definition consists of components
-  // that describes the module's functionality and behavior.
-  // See https://docs.expo.dev/modules/module-api for more details about available components.
-  override fun definition() = ModuleDefinition {
-    // Sets the name of the module that JavaScript code will use to refer to the module. Takes a string as an argument.
-    // Can be inferred from module's class name, but it's recommended to set it explicitly for clarity.
-    // The module will be accessible from `requireNativeModule('ExpoIDnow')` in JavaScript.
-    Name("ExpoIDnow")
+    private lateinit var idnowSdk: IDnowSDK
 
-    // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    Constants(
-      "PI" to Math.PI
-    )
+    override fun definition() = ModuleDefinition {
+        Name("ExpoIDnow")
 
-    // Defines event names that the module can send to JavaScript.
-    Events("onChange")
+        AsyncFunction("init") { language: String, promise: Promise ->
+            val activity = appContext.activityProvider?.currentActivity
+            val idnowConfig = IDnowConfig.Builder
+                .getInstance()
+                .withLanguage(language)
+                .build()
 
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      "Hello world! 👋"
+            idnowSdk = IDnowSDK.getInstance()
+            if (activity != null) {
+                idnowSdk.initialize(activity, idnowConfig)
+                promise.resolve("initialized sdk with language $language")
+            } else {
+                promise.resolve("Failed to resolve idnow init activity is empty")
+            }
+        }
+
+        AsyncFunction("startIdent") { token: String, language: String, promise: Promise ->
+            val listener = IDnowResultListener { result: IDnowResult ->
+                val expoResponse = ExpoIDnowResponse(result.statusCode, result.resultType)
+                promise.resolve(expoResponse.toJsonString())
+            }
+
+            idnowSdk.startIdent(token, listener)
+        }
     }
-
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { value: String ->
-      // Send an event to JavaScript.
-      sendEvent("onChange", mapOf(
-        "value" to value
-      ))
-    }
-
-    // Enables the module to be used as a native view. Definition components that are accepted as part of
-    // the view definition: Prop, Events.
-    View(ExpoIDnowView::class) {
-      // Defines a setter for the `name` prop.
-      Prop("name") { view: ExpoIDnowView, prop: String ->
-        println(prop)
-      }
-    }
-  }
 }

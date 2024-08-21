@@ -1,43 +1,119 @@
+/**
+ * https://github.com/idnow/de.idnow.android.sdk
+ * https://github.com/mrFunkyWisdom/auto-ident-expo/blob/main/android/build.gradle
+ * https://github.com/idnow/de.idnow.android-sample/blob/master/app/build.gradle
+ */
+
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 group = 'com.jtec.idnow'
 version = '0.1.0'
 
 def expoModulesCorePlugin = new File(project(":expo-modules-core").projectDir.absolutePath, "ExpoModulesCorePlugin.gradle")
-apply from: expoModulesCorePlugin
-applyKotlinExpoModulesCorePlugin()
-useCoreDependencies()
-useExpoPublishing()
+if (expoModulesCorePlugin.exists()) {
+    apply from: expoModulesCorePlugin
+    applyKotlinExpoModulesCorePlugin()
+    useCoreDependencies()
+    useExpoPublishing()
+}
 
-// If you want to use the managed Android SDK versions from expo-modules-core, set this to true.
-// The Android SDK versions will be bumped from time to time in SDK releases and may introduce breaking changes in your module code.
-// Most of the time, you may like to manage the Android SDK versions yourself.
-def useManagedAndroidSdkVersions = false
-if (useManagedAndroidSdkVersions) {
-  useDefaultAndroidSdkVersions()
-} else {
-  buildscript {
-    // Simple helper that allows the root project to override versions declared by this library.
+buildscript {
+    // Overrides dependency versions declared by this library.
     ext.safeExtGet = { prop, fallback ->
-      rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+        rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
     }
-  }
-  project.android {
-    compileSdkVersion safeExtGet("compileSdkVersion", 34)
-    defaultConfig {
-      minSdkVersion safeExtGet("minSdkVersion", 21)
-      targetSdkVersion safeExtGet("targetSdkVersion", 34)
+
+    // Overrides Kotlin version and the Kotlin Gradle plugin version.
+    ext.getKotlinVersion = {
+        if (ext.has("kotlinVersion")) {
+            ext.kotlinVersion()
+        } else {
+            ext.safeExtGet("kotlinVersion", "1.9.25")
+        }
     }
-  }
+
+    // Overrides IDnow SDK version.
+    ext.getIDnowVersion = {
+        if (ext.has("idnowVersion")) {
+            ext.kotlinVersion()
+        } else {
+            ext.safeExtGet("idnowVersion", "5.9.0")
+        }
+    }
+
+    repositories {
+        mavenCentral()
+        google()
+        maven {
+            url 'https://www.jitpack.io'
+        }
+        maven {
+            url "https://raw.githubusercontent.com/idnow/de.idnow.android.sdk/master"
+        }
+    }
+
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.5.2")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${getKotlinVersion()}")
+    }
 }
 
 android {
-  namespace "com.jtec.idnow"
-  defaultConfig {
-    versionCode 1
-    versionName "0.1.0"
-  }
-  lintOptions {
-    abortOnError false
-  }
+    compileSdkVersion safeExtGet("compileSdkVersion", 34)
+    buildToolsVersion safeExtGet("buildToolsVersion", "34.0.0")
+
+    // Use NDK version 23 which has both M1 support and is the side-by-side NDK version from AGP.
+    ndkVersion safeExtGet("ndkVersion", "23.1.7779620")
+
+    def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION
+    if (agpVersion.tokenize('.')[0].toInteger() < 8) {
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_11
+            targetCompatibility JavaVersion.VERSION_11
+        }
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_11.majorVersion
+        }
+    }
+
+    namespace "com.jtec.idnow"
+
+    defaultConfig {
+        minSdkVersion safeExtGet("minSdkVersion", 24)
+        targetSdkVersion safeExtGet("targetSdkVersion", 34)
+
+        versionCode 1
+        versionName "0.1.0"
+
+//        ndk.abiFilters 'armeabi-v7a', 'arm64-v8a'
+//        multiDexEnabled = true
+
+//        renderscriptTargetApi 24
+//        renderscriptSupportModeEnabled true
+//        vectorDrawables.useSupportLibrary = true
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        google()
+        maven {
+            url 'https://www.jitpack.io'
+        }
+        maven {
+            url "https://raw.githubusercontent.com/idnow/de.idnow.android.sdk/master"
+        }
+    }
+}
+
+dependencies {
+    implementation project(':expo-modules-core')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${getKotlinVersion()}"
+    implementation "de.idnow.android.sdk:idnow-platform:${getIDnowVersion()}"
 }
