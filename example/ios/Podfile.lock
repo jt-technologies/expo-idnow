@@ -13,6 +13,7 @@ PODS:
     - ExpoModulesCore
   - ExpoIDnow (0.1.0):
     - ExpoModulesCore
+    - XS2AiOS
   - ExpoKeepAwake (13.0.2):
     - ExpoModulesCore
   - ExpoModulesCore (1.12.21):
@@ -44,6 +45,10 @@ PODS:
   - hermes-engine (0.74.5):
     - hermes-engine/Pre-built (= 0.74.5)
   - hermes-engine/Pre-built (0.74.5)
+  - KeychainAccess (4.2.2)
+  - NVActivityIndicatorView (5.1.1):
+    - NVActivityIndicatorView/Base (= 5.1.1)
+  - NVActivityIndicatorView/Base (5.1.1)
   - RCT-Folly (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -1202,6 +1207,13 @@ PODS:
     - React-perflogger (= 0.74.5)
     - React-utils (= 0.74.5)
   - SocketRocket (0.7.0)
+  - SwiftyJSON (5.0.1)
+  - XS2AiOS (2.0.0):
+    - KeychainAccess (= 4.2.2)
+    - NVActivityIndicatorView (= 5.1.1)
+    - SwiftyJSON (= 5.0.1)
+    - XS2AiOSNetService (= 1.0.7)
+  - XS2AiOSNetService (1.0.7)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -1272,7 +1284,12 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - KeychainAccess
+    - NVActivityIndicatorView
     - SocketRocket
+    - SwiftyJSON
+    - XS2AiOS
+    - XS2AiOSNetService
 
 EXTERNAL SOURCES:
   boost:
@@ -1409,13 +1426,15 @@ SPEC CHECKSUMS:
   ExpoAsset: 323700f291684f110fb55f0d4022a3362ea9f875
   ExpoFileSystem: 80bfe850b1f9922c16905822ecbf97acd711dc51
   ExpoFont: e7f2275c10ca8573c991e007329ad6bf98086485
-  ExpoIDnow: b66ea9999fd40c7e47755125952c69af2ec17712
+  ExpoIDnow: c4ef445ebd30db7b2fed45cc5c511bfdcb258ab3
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
   ExpoModulesCore: ae1a4244021797374769ef44499fc4313d2ac676
   FBLazyVector: ac12dc084d1c8ec4cc4d7b3cf1b0ebda6dab85af
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
   hermes-engine: 8c1577f3fdb849cbe7729c2e7b5abc4b845e88f8
+  KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
+  NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
   RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
   RCTDeprecation: 3afceddffa65aee666dafd6f0116f1d975db1584
   RCTRequired: ec1239bc9d8bf63e10fb92bd8b26171a9258e0c1
@@ -1464,6 +1483,9 @@ SPEC CHECKSUMS:
   React-utils: f242eb7e7889419d979ca0e1c02ccc0ea6e43b29
   ReactCommon: f7da14a8827b72704169a48c929bcde802698361
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
+  SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
+  XS2AiOS: ad9981a2d0fa0ec47b96717830992bde2de8c69a
+  XS2AiOSNetService: 28fb0fb46933028baa3772b4daa96eb9ee6c4fef
   Yoga: 2246eea72aaf1b816a68a35e6e4b74563653ae09
 
 PODFILE CHECKSUM: 53a1cc897b787c9cb93fdc72512557176169cfdd
