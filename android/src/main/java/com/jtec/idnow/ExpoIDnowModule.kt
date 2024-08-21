@@ -7,6 +7,23 @@ import de.idnow.core.IDnowSDK.IDnowResultListener
 import expo.modules.kotlin.Promise
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
+import org.json.JSONObject
+
+data class ExpoIDnowResponse(val status: String, val resultType: IDnowResult.ResultType) {
+    private val result: String = when (resultType) {
+        IDnowResult.ResultType.CANCELLED -> "CANCELLED"
+        IDnowResult.ResultType.FINISHED -> "FINISHED"
+        IDnowResult.ResultType.ERROR -> "ERROR"
+        else -> "UNKNOWN"
+    }
+
+    fun toJsonString(): JSONObject {
+        val jsonObj = JSONObject()
+        jsonObj.put("status", status)
+        jsonObj.put("result", result)
+        return jsonObj
+    }
+}
 
 class ExpoIDnowModule : Module() {
     private lateinit var idnowSdk: IDnowSDK
@@ -33,7 +50,7 @@ class ExpoIDnowModule : Module() {
         AsyncFunction("startIdent") { token: String, language: String, promise: Promise ->
             val listener = IDnowResultListener { result: IDnowResult ->
                 val expoResponse = ExpoIDnowResponse(result.statusCode, result.resultType)
-                promise.resolve(expoResponse.json().toString())
+                promise.resolve(expoResponse.toJsonString())
             }
 
             idnowSdk.startIdent(token, listener)
