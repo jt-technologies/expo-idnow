@@ -17,11 +17,11 @@ data class ExpoIDnowResponse(val status: String, val resultType: IDnowResult.Res
         else -> "UNKNOWN"
     }
 
-    fun toJsonString(): JSONObject {
+    fun toJsonString(): String {
         val jsonObj = JSONObject()
-        jsonObj.put("status", status)
         jsonObj.put("result", result)
-        return jsonObj
+        jsonObj.put("status", status)
+        return jsonObj.toString()
     }
 }
 
@@ -41,13 +41,14 @@ class ExpoIDnowModule : Module() {
             idnowSdk = IDnowSDK.getInstance()
             if (activity != null) {
                 idnowSdk.initialize(activity, idnowConfig)
-                promise.resolve("initialized sdk with language $language")
+                promise.resolve("initialized sdk with language: $language")
             } else {
                 promise.resolve("Failed to resolve idnow init activity is empty")
             }
         }
 
-        AsyncFunction("startIdent") { token: String, language: String, promise: Promise ->
+        AsyncFunction("startIdent") { token: String, _language: String, promise: Promise ->
+            println("token: $token")
             val listener = IDnowResultListener { result: IDnowResult ->
                 val expoResponse = ExpoIDnowResponse(result.statusCode, result.resultType)
                 promise.resolve(expoResponse.toJsonString())

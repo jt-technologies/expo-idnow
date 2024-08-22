@@ -38,7 +38,7 @@ buildscript {
         if (ext.has("idnowVersion")) {
             ext.kotlinVersion()
         } else {
-            ext.safeExtGet("idnowVersion", "5.9.0")
+            ext.safeExtGet("idnowVersion", "5.10.0")
         }
     }
 
