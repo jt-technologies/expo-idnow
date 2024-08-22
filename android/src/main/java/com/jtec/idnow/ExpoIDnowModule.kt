@@ -1,60 +1,71 @@
 package com.jtec.idnow
 
-import de.idnow.core.IDnowConfig
-import de.idnow.core.IDnowResult
-import de.idnow.core.IDnowSDK
-import de.idnow.core.IDnowSDK.IDnowResultListener
+import de.idnow.sdk.IDnowSDK
 import expo.modules.kotlin.Promise
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
+import expo.modules.kotlin.records.Field
 import org.json.JSONObject
 
-data class ExpoIDnowResponse(val status: String, val resultType: IDnowResult.ResultType) {
-    private val result: String = when (resultType) {
-        IDnowResult.ResultType.CANCELLED -> "CANCELLED"
-        IDnowResult.ResultType.FINISHED -> "FINISHED"
-        IDnowResult.ResultType.ERROR -> "ERROR"
+data class ExpoIDnowOptions(
+    @Field val language: String = "de",
+    @Field val environment: String = "LIVE",
+    @Field val connectionType: String = "WEBSOCKET",
+    @Field val useNewBrand: Boolean = false
+)
+
+data class ExpoIDnowResponse(val resultCode: Int, val error: String? = "") {
+    private val result: String = when (resultCode) {
+        IDnowSDK.RESULT_CODE_FAILED -> "FAILED"
+        IDnowSDK.RESULT_CODE_SUCCESS -> "SUCCEED"
+        IDnowSDK.RESULT_CODE_CANCEL -> "CANCELLED"
+        IDnowSDK.RESULT_CODE_WRONG_IDENT -> "WRONG_IDENT_ERROR"
+        IDnowSDK.RESULT_CODE_INTERNAL -> "INTERNAL_ERROR"
         else -> "UNKNOWN"
     }
 
     fun toJsonString(): String {
         val jsonObj = JSONObject()
         jsonObj.put("result", result)
-        jsonObj.put("status", status)
+        jsonObj.put("error", error)
         return jsonObj.toString()
     }
 }
 
 class ExpoIDnowModule : Module() {
-    private lateinit var idnowSdk: IDnowSDK
-
     override fun definition() = ModuleDefinition {
         Name("ExpoIDnow")
 
-        AsyncFunction("init") { language: String, promise: Promise ->
+        AsyncFunction("startIdent") { token: String,
+                                      companyId: String,
+                                      options: ExpoIDnowOptions,
+                                      promise: Promise ->
             val activity = appContext.activityProvider?.currentActivity
-            val idnowConfig = IDnowConfig.Builder
-                .getInstance()
-                .withLanguage(language)
-                .build()
-
-            idnowSdk = IDnowSDK.getInstance()
-            if (activity != null) {
-                idnowSdk.initialize(activity, idnowConfig)
-                promise.resolve("initialized sdk with language: $language")
-            } else {
-                promise.resolve("Failed to resolve idnow init activity is empty")
-            }
-        }
-
-        AsyncFunction("startIdent") { token: String, _language: String, promise: Promise ->
-            println("token: $token")
-            val listener = IDnowResultListener { result: IDnowResult ->
-                val expoResponse = ExpoIDnowResponse(result.statusCode, result.resultType)
-                promise.resolve(expoResponse.toJsonString())
+            if (activity == null) {
+                promise.resolve("Failed to resolve current Expo Activity")
             }
 
-            idnowSdk.startIdent(token, listener)
+            try {
+                IDnowSDK.getInstance().initialize(activity, companyId, options.language);
+                IDnowSDK.setTransactionToken(token)
+                IDnowSDK.setNewBrand(options.useNewBrand);
+
+                // TODO:
+                // IDnowSDK.setConnectionType(options.connectionType)
+
+                // TODO:
+                if (options.environment == "TEST") {
+                    IDnowSDK.setEnvironment(IDnowSDK.Server.TEST);
+                }
+
+                IDnowSDK.getInstance().start(IDnowSDK.getTransactionToken()) { result, _ ->
+                    promise.resolve(ExpoIDnowResponse(result).toJsonString())
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace();
+                promise.resolve(ExpoIDnowResponse(-1, e.message).toJsonString())
+            }
         }
     }
 }
