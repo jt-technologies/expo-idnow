@@ -13,7 +13,11 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.jtec.idnow.example"
+      "bundleIdentifier": "com.jtec.idnow.example",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow camera access for video identification",
+        "NSMicrophoneUsageDescription": "Allow microphone access for video identification"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -30,12 +34,12 @@
         "expo-build-properties",
         {
           "android": {
-            "kotlinVersion": "1.9.25",
-            "compileSdkVersion": 34,
-            "buildToolsVersion": "34.0.0",
+            "compileSdk": 34,
             "ndkVersion": "26.1.10909125",
             "minSdkVersion": 24,
-            "targetSdkVersion": 34
+            "targetSdkVersion": 34,
+            "kotlinVersion": "1.9.25",
+            "idnowVersion": "8.4.0"
           }
         }
       ]

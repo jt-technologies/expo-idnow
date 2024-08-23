@@ -1,59 +1,41 @@
 package com.jtec.idnow
 
-import de.idnow.core.IDnowConfig
-import de.idnow.core.IDnowResult
-import de.idnow.core.IDnowSDK
-import de.idnow.core.IDnowSDK.IDnowResultListener
+import de.idnow.sdk.IDnowSDK
 import expo.modules.kotlin.Promise
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
-import org.json.JSONObject
-
-data class ExpoIDnowResponse(val status: String, val resultType: IDnowResult.ResultType) {
-    private val result: String = when (resultType) {
-        IDnowResult.ResultType.CANCELLED -> "CANCELLED"
-        IDnowResult.ResultType.FINISHED -> "FINISHED"
-        IDnowResult.ResultType.ERROR -> "ERROR"
-        else -> "UNKNOWN"
-    }
-
-    fun toJsonString(): JSONObject {
-        val jsonObj = JSONObject()
-        jsonObj.put("status", status)
-        jsonObj.put("result", result)
-        return jsonObj
-    }
-}
 
 class ExpoIDnowModule : Module() {
-    private lateinit var idnowSdk: IDnowSDK
-
     override fun definition() = ModuleDefinition {
         Name("ExpoIDnow")
 
-        AsyncFunction("init") { language: String, promise: Promise ->
+        AsyncFunction("startIdent") { companyId: String,
+                                      token: String,
+                                      options: ExpoIDnowOptions,
+                                      promise: Promise ->
             val activity = appContext.activityProvider?.currentActivity
-            val idnowConfig = IDnowConfig.Builder
-                .getInstance()
-                .withLanguage(language)
-                .build()
-
-            idnowSdk = IDnowSDK.getInstance()
-            if (activity != null) {
-                idnowSdk.initialize(activity, idnowConfig)
-                promise.resolve("initialized sdk with language $language")
-            } else {
-                promise.resolve("Failed to resolve idnow init activity is empty")
-            }
-        }
-
-        AsyncFunction("startIdent") { token: String, language: String, promise: Promise ->
-            val listener = IDnowResultListener { result: IDnowResult ->
-                val expoResponse = ExpoIDnowResponse(result.statusCode, result.resultType)
-                promise.resolve(expoResponse.toJsonString())
+            if (activity == null) {
+                promise.resolve("Failed to resolve current Expo Activity")
             }
 
-            idnowSdk.startIdent(token, listener)
+            try {
+                IDnowSDK.getInstance().initialize(activity, companyId, options.language);
+                IDnowSDK.setTransactionToken(token)
+                IDnowSDK.setNewBrand(true);
+                IDnowSDK.setConnectionType(
+                    options.connectionType.toIDnowConnectionType(),
+                    activity
+                )
+                IDnowSDK.setEnvironment(options.environment.toIDnowEnvironment());
+
+                IDnowSDK.getInstance().start(IDnowSDK.getTransactionToken()) { result, _ ->
+                    promise.resolve(ExpoIDnowResponse(result).toJsonString())
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace();
+                promise.resolve(ExpoIDnowResponse(-1, e.message).toJsonString())
+            }
         }
     }
 }
