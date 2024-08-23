@@ -15,11 +15,10 @@ export default function App() {
     if (!companyId || !identToken) return
 
     try {
-      const response = await startIdent(identToken, companyId, {
+      const response = await startIdent(companyId, identToken, {
         language: 'de',
-        environment: ExpoIDnowEnvironment.TEST,
-        connectionType: ExpoIDnowEnvironmentConnectionType.WEBSOCKET,
-        useNewBrand: true,
+        connectionType: ExpoIDnowEnvironmentConnectionType.websocket,
+        environment: ExpoIDnowEnvironment.test,
       })
       console.log(response)
     } catch (error) {
@@ -43,7 +42,12 @@ export default function App() {
         value={identToken}
       />
 
-      <Button title="Start Ident" color="#841584" onPress={handlePress} />
+      <Button
+        title="Start Ident"
+        color="#841584"
+        disabled={!companyId || !identToken}
+        onPress={handlePress}
+      />
     </View>
   )
 }
