@@ -43,11 +43,11 @@
       <true/>
     </dict>
     <key>NSCameraUsageDescription</key>
-    <string>Allow camera access for video identification</string>
+    <string>Lorem ipsum dolor sit amet.</string>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string />
+    <string>Allow Location Access for Video Identification</string>
     <key>NSMicrophoneUsageDescription</key>
-    <string>Allow microphone access for video identification</string>
+    <string>Allow Microphone Access for Video Identification</string>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>

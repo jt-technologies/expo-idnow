@@ -15,8 +15,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.jtec.idnow.example",
       "infoPlist": {
-        "NSCameraUsageDescription": "Allow camera access for video identification",
-        "NSMicrophoneUsageDescription": "Allow microphone access for video identification"
+        "NSCameraUsageDescription": "Lorem ipsum dolor sit amet."
       }
     },
     "android": {
@@ -42,7 +41,8 @@
             "idnowVersion": "8.4.0"
           }
         }
-      ]
+      ],
+      ["../app.config.js"]
     ]
   }
 }

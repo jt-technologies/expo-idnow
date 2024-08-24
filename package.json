@@ -1,5 +1,5 @@
 {
-  "name": "expo-idnow",
+  "name": "@j-tec/expo-idnow",
   "version": "0.1.0",
   "description": "IDnow Video Ident Expo Module",
   "main": "build/index.js",
