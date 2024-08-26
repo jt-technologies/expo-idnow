@@ -27,22 +27,35 @@ const setInfoPlistConfig = (infoPlist: InfoPlist): InfoPlist => {
  * @see https://github.com/idnow/de.idnow.android?tab=readme-ov-file#how-to-import-the-sdk
  */
 const setBuildGradleConfig = (buildGradleContent: string): string => {
+  const dependencySubstitution = `
+    configurations.all {
+        resolutionStrategy {
+            dependencySubstitution {
+                substitute module('com.github.barteksc:android-pdf-viewer:2.6.0') using module('com.github.mhiew:android-pdf-viewer:3.2.0-beta.3')
+            }
+        }
+    }
+  `
+
+  const withDependencySubstitution = mergeContents({
+    src: buildGradleContent,
+    newSrc: dependencySubstitution,
+    tag: '@j-tec/expo-idnow dependency substitution',
+    anchor: /allprojects\s*\{/,
+    offset: 0,
+    comment: '//',
+  }).contents
+
   const newMavenRepositories = `
         maven {
           url 'https://raw.githubusercontent.com/idnow/de.idnow.android/master'
         }
-        jcenter() {
-          // JCenter is now read-only. Therefore, no new versions are published there any more.
-          // We only fetch the necessary dependencies for IDnow from JCenter to avoid loading old dependencies.
-          content {
-            includeModule("com.github.barteksc", "android-pdf-viewer")
-          }
-        }
   `
+
   return mergeContents({
-    src: buildGradleContent,
+    src: withDependencySubstitution,
     newSrc: newMavenRepositories,
-    tag: '@j-tec/expo-idnow',
+    tag: '@j-tec/expo-idnow maven repositories',
     anchor: /maven\s*\{\s*url\s*'https:\/\/www.jitpack.io'\s*\}\s*/,
     offset: 0,
     comment: '//',

@@ -74,21 +74,21 @@ android {
 }
 
 allprojects {
+    configurations.all {
+        resolutionStrategy {
+            dependencySubstitution {
+                substitute module('com.github.barteksc:android-pdf-viewer:2.6.0') using module('com.github.mhiew:android-pdf-viewer:3.2.0-beta.3')
+            }
+        }
+    }
     repositories {
         mavenCentral()
         google()
         maven {
-            url 'https://www.jitpack.io'
-        }
-        maven {
             url 'https://raw.githubusercontent.com/idnow/de.idnow.android/master'
         }
-        jcenter() {
-            // JCenter is now read-only. Therefore, no new versions are published there any more.
-            // We only fetch the necessary dependencies for IDnow from JCenter to avoid loading old dependencies.
-            content {
-                includeModule("com.github.barteksc", "android-pdf-viewer")
-            }
+        maven {
+            url 'https://www.jitpack.io'
         }
     }
 }
