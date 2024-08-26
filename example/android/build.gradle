@@ -2,12 +2,13 @@
 
 buildscript {
     ext {
-        compileSdk = Integer.parseInt(findProperty('android.compileSdk') ?: '34')
-        ndkVersion = findProperty('android.ndkVersion') ?: "26.1.10909125"
-        minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '24')
+        buildToolsVersion = findProperty('android.buildToolsVersion') ?: '34.0.0'
+        minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '23')
+        compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '34')
         targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '34')
-        kotlinVersion = findProperty('android.kotlinVersion') ?: '1.9.25'
-        idnowVersion = findProperty('android.idnowVersion') ?: '8.4.0'
+        kotlinVersion = findProperty('android.kotlinVersion') ?: '1.9.23'
+
+        ndkVersion = "26.1.10909125"
     }
     repositories {
         google()
@@ -33,15 +34,22 @@ allprojects {
             url(new File(['node', '--print', "require.resolve('jsc-android/package.json', { paths: [require.resolve('react-native/package.json')] })"].execute(null, rootDir).text.trim(), '../dist'))
         }
 
-        jcenter()
-        mavenCentral()
         google()
+        mavenCentral()
+        maven { url 'https://www.jitpack.io' }
+// @generated begin @j-tec/expo-idnow - expo prebuild (DO NOT MODIFY) sync-a0e4e3329883593f8688fa65aba62ecb2dce6c65
+
         maven {
-            url 'https://www.jitpack.io'
+          url 'https://raw.githubusercontent.com/idnow/de.idnow.android/master'
         }
-        maven {
-            // url "https://raw.githubusercontent.com/idnow/de.idnow.android.sdk/master"
-            url "https://raw.githubusercontent.com/idnow/de.idnow.android/master"
+        jcenter() {
+          // JCenter is now read-only. Therefore, no new versions are published there any more.
+          // We only fetch the necessary dependencies for IDnow from JCenter to avoid loading old dependencies.
+          content {
+            includeModule("com.github.barteksc", "android-pdf-viewer")
+          }
         }
+  
+// @generated end @j-tec/expo-idnow
     }
 }
