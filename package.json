@@ -8,7 +8,6 @@
     "build": "expo-module build",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
-    "test": "expo-module test",
     "prepare": "expo-module prepare",
     "prepublishOnly": "expo-module prepublishOnly",
     "expo-module": "expo-module",
@@ -25,7 +24,7 @@
   "bugs": {
     "url": "https://github.com/j-tec/expo-idnow/issues"
   },
-  "author": "Alex Rodriguez <alex.rodriguez@justtrade.com> ()",
+  "author": "Alex Rodriguez <alex.rodriguez@justtrade.com>",
   "license": "MIT",
   "homepage": "https://github.com/j-tec/expo-idnow#readme",
   "devDependencies": {
