@@ -28,21 +28,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      [
-        "expo-build-properties",
-        {
-          "android": {
-            "compileSdk": 34,
-            "ndkVersion": "26.1.10909125",
-            "minSdkVersion": 24,
-            "targetSdkVersion": 34,
-            "kotlinVersion": "1.9.25",
-            "idnowVersion": "8.4.0"
-          }
-        }
-      ],
-      ["../app.config.js"]
-    ]
+    "plugins": [["../app.config.js"]]
   }
 }

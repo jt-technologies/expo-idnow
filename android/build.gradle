@@ -22,21 +22,18 @@ if (expoModulesCorePlugin.exists()) {
 }
 
 buildscript {
-    // Overrides dependency versions declared by this library.
     ext.safeExtGet = { prop, fallback ->
         rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
     }
 
-    // Overrides Kotlin version and the Kotlin Gradle plugin version.
     ext.getKotlinVersion = {
         if (ext.has("kotlinVersion")) {
             ext.kotlinVersion()
         } else {
-            ext.safeExtGet("kotlinVersion", "1.9.25")
+            ext.safeExtGet("kotlinVersion", "1.9.23")
         }
     }
 
-    // Overrides IDnow SDK version.
     ext.getIDnowVersion = {
         if (ext.has("idnowVersion")) {
             ext.idnowVersion()
@@ -44,29 +41,21 @@ buildscript {
             ext.safeExtGet("idnowVersion", "8.4.0")
         }
     }
-
-    repositories {
-        mavenCentral()
-        google()
-        maven {
-            url 'https://www.jitpack.io'
-        }
-        maven {
-            url "https://raw.githubusercontent.com/idnow/de.idnow.android/master"
-        }
-    }
-
-    dependencies {
-        classpath("com.android.tools.build:gradle:8.5.2")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${getKotlinVersion()}")
-    }
 }
 
 android {
-    compileSdk safeExtGet("compileSdk", 34)
+    namespace "com.jtec.idnow"
 
+    compileSdk safeExtGet("compileSdkVersion", 34)
     // Use NDK version >23 which has both M1 support and is the side-by-side NDK version from AGP.
-    ndkVersion safeExtGet("ndkVersion", "26.1.10909125")
+    ndkVersion safeExtGet("ndkVersion", "23.1.7779620")
+
+    defaultConfig {
+        versionCode 1
+        versionName "0.1.0"
+        minSdkVersion safeExtGet("minSdkVersion", 23)
+        targetSdkVersion safeExtGet("targetSdkVersion", 34)
+    }
 
     def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION
     if (agpVersion.tokenize('.')[0].toInteger() < 8) {
@@ -77,24 +66,6 @@ android {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_11.majorVersion
         }
-    }
-
-    namespace "com.jtec.idnow"
-
-    defaultConfig {
-        minSdkVersion safeExtGet("minSdkVersion", 24)
-        targetSdkVersion safeExtGet("targetSdkVersion", 34)
-
-        versionCode 1
-        versionName "0.1.0"
-
-        renderscriptTargetApi 24
-        renderscriptSupportModeEnabled true
-        vectorDrawables.useSupportLibrary = true
-    }
-
-    packagingOptions {
-        pickFirst 'lib/armeabi-v7a/libRSSupport.so'
     }
 
     lintOptions {
@@ -110,7 +81,14 @@ allprojects {
             url 'https://www.jitpack.io'
         }
         maven {
-            url "https://raw.githubusercontent.com/idnow/de.idnow.android/master"
+            url 'https://raw.githubusercontent.com/idnow/de.idnow.android/master'
+        }
+        jcenter() {
+            // JCenter is now read-only. Therefore, no new versions are published there any more.
+            // We only fetch the necessary dependencies for IDnow from JCenter to avoid loading old dependencies.
+            content {
+                includeModule("com.github.barteksc", "android-pdf-viewer")
+            }
         }
     }
 }
