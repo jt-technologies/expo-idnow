@@ -1,15 +1,15 @@
 import { StyleSheet, View, Button, TextInput } from 'react-native'
 
 import {
-  ExpoIDnowEnvironment,
-  ExpoIDnowEnvironmentConnectionType,
+  IDnowEnvironment,
+  IDnowConnectionType,
   startIdent,
 } from '@j-tec/expo-idnow'
 import { useState } from 'react'
 
 export default function App() {
-  const [companyId, setCompanyId] = useState<string>()
-  const [identToken, setIdentToken] = useState<string>()
+  const [companyId, setCompanyId] = useState<string>('')
+  const [identToken, setIdentToken] = useState<string>('')
 
   const handlePress = async () => {
     if (!companyId || !identToken) return
@@ -17,8 +17,8 @@ export default function App() {
     try {
       const response = await startIdent(companyId, identToken, {
         language: 'de',
-        connectionType: ExpoIDnowEnvironmentConnectionType.websocket,
-        environment: ExpoIDnowEnvironment.test,
+        connectionType: IDnowConnectionType.websocket,
+        environment: IDnowEnvironment.test,
       })
       console.log(response)
     } catch (error) {

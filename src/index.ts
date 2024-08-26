@@ -6,7 +6,7 @@ import ExpoIDnowModule from './ExpoIDnowModule'
  */
 const tokenRegex = /.{3}-.{5}$/
 
-export enum ExpoIDnowEnvironment {
+export enum IDnowEnvironment {
   dev = 'dev',
   dev0 = 'dev_0',
   dev1 = 'dev1',
@@ -43,18 +43,18 @@ export enum ExpoIDnowEnvironment {
   notDefined = 'notDefined',
 }
 
-export enum ExpoIDnowEnvironmentConnectionType {
+export enum IDnowConnectionType {
   websocket = 'websocket',
   longPolling = 'longPolling',
 }
 
-export type ExpoIDnowOptions = {
+export type IDnowOptions = {
   language?: string
-  connectionType?: ExpoIDnowEnvironmentConnectionType
-  environment?: ExpoIDnowEnvironment
+  connectionType?: IDnowConnectionType
+  environment?: IDnowEnvironment
 }
 
-export type ExpoIDnowResultType =
+export type IDnowResultType =
   | 'FAILED'
   | 'SUCCEED'
   | 'CANCELED'
@@ -62,16 +62,16 @@ export type ExpoIDnowResultType =
   | 'INTERNAL_ERROR'
   | 'UNKNOWN'
 
-export type ExpoIDnowResponse = {
-  result: ExpoIDnowResultType
+export type IDnowResponse = {
+  result: IDnowResultType
   error?: string
 }
 
 export async function startIdent(
   companyId: string,
   token: string,
-  options?: ExpoIDnowOptions,
-): Promise<ExpoIDnowResponse | undefined> {
+  options?: IDnowOptions,
+): Promise<IDnowResponse | undefined> {
   if (!tokenRegex.test(token)) {
     throw new Error('Token must match the pattern .{3}-.{5}$')
   }
@@ -85,12 +85,7 @@ export async function startIdent(
     options,
   )
 
-  try {
-    const jsonRes: ExpoIDnowResponse = JSON.parse(response)
+  const jsonRes: IDnowResponse = JSON.parse(response)
 
-    return jsonRes
-  } catch (error) {
-    console.error('Filed to parse ExpoIDnowResponse:', error)
-    return undefined
-  }
+  return jsonRes
 }
