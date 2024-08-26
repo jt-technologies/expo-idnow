@@ -5,5 +5,6 @@ module.exports = {
   ignorePatterns: ['.expo', 'android', 'ios', 'build', 'node_modules'],
   rules: {
     'prettier/prettier': 'warn',
+    'no-unused-vars': 'off',
   },
 }
