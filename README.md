@@ -17,15 +17,21 @@ For bare React Native projects, you must ensure that you have [installed and con
 ### Add the package to your npm dependencies
 
 ```
-npm install @j-tec/expo-idnow
+npm install @jt-technologies/expo-idnow
 ```
 
-### Configure for iOS
+### Configure Expo Plugin
 
-Run `npx pod-install` after installing the npm package.
+In you `app.json` file, include the next configuration:
 
-### Configure for Android
-
-# Contributing
-
-Contributions are very welcome! Please refer to guidelines described in the [contributing guide](https://github.com/expo/expo#contributing).
+```
+{
+    "expo": {
+        ...
+        "plugins": [
+            ...
+            ["@jt-technologies/expo-idnow"],
+        ]
+    }
+}
+```
