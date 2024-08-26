@@ -44,7 +44,7 @@ const setBuildGradleConfig = (buildGradleContent: string): string => {
     newSrc: newMavenRepositories,
     tag: '@j-tec/expo-idnow',
     anchor: /maven\s*\{\s*url\s*'https:\/\/www.jitpack.io'\s*\}\s*/,
-    offset: 1,
+    offset: 0,
     comment: '//',
   }).contents
 }
