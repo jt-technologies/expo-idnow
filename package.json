@@ -1,6 +1,6 @@
 {
   "name": "@jt-technologies/expo-idnow",
-  "version": "0.1.7",
+  "version": "1.0.0",
   "description": "IDnow Video Ident Expo Module",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -20,13 +20,13 @@
     "expo-idnow",
     "ExpoIDnow"
   ],
-  "repository": "https://github.com/j-tec/expo-idnow",
+  "repository": "https://github.com/jt-technologies/expo-idnow",
   "bugs": {
-    "url": "https://github.com/j-tec/expo-idnow/issues"
+    "url": "https://github.com/jt-technologies/expo-idnow/issues"
   },
   "author": "Alex Rodriguez <alex.rodriguez@justtrade.com>",
   "license": "MIT",
-  "homepage": "https://github.com/j-tec/expo-idnow#readme",
+  "homepage": "https://github.com/jt-technologies/expo-idnow#readme",
   "devDependencies": {
     "@types/react": "^18.0.25",
     "eslint-config-expo": "^7.1.2",

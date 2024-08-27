@@ -43,7 +43,7 @@ const setBuildGradleConfig = (buildGradleContent: string): string => {
   const withDependencySubstitution = mergeContents({
     src: buildGradleContent,
     newSrc: dependencySubstitution,
-    tag: '@j-tec/expo-idnow dependency substitution',
+    tag: '@jt-technologies/expo-idnow dependency substitution',
     anchor: /allprojects\s*\{/,
     offset: 1,
     comment: '//',
@@ -57,7 +57,7 @@ const setBuildGradleConfig = (buildGradleContent: string): string => {
   return mergeContents({
     src: withDependencySubstitution,
     newSrc: newMavenRepositories,
-    tag: '@j-tec/expo-idnow maven repositories',
+    tag: '@jt-technologies/expo-idnow maven repositories',
     anchor: /maven\s*\{\s*url\s*'https:\/\/www.jitpack.io'\s*\}\s*/,
     offset: 0,
     comment: '//',
