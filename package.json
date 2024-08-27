@@ -1,6 +1,6 @@
 {
   "name": "@jt-technologies/expo-idnow",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "IDnow Video Ident Expo Module",
   "main": "build/index.js",
   "types": "build/index.d.ts",

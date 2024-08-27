@@ -27,6 +27,10 @@ const setInfoPlistConfig = (infoPlist: InfoPlist): InfoPlist => {
  * @see https://github.com/idnow/de.idnow.android?tab=readme-ov-file#how-to-import-the-sdk
  */
 const setBuildGradleConfig = (buildGradleContent: string): string => {
+  /**
+   * Substitute the android-pdf-viewer dependency.
+   * @see https://github.com/jitpack/jitpack.io/issues/4039#issuecomment-2298913452
+   */
   const dependencySubstitution = `
     configurations.all {
         resolutionStrategy {
@@ -36,13 +40,12 @@ const setBuildGradleConfig = (buildGradleContent: string): string => {
         }
     }
   `
-
   const withDependencySubstitution = mergeContents({
     src: buildGradleContent,
     newSrc: dependencySubstitution,
     tag: '@j-tec/expo-idnow dependency substitution',
     anchor: /allprojects\s*\{/,
-    offset: 0,
+    offset: 1,
     comment: '//',
   }).contents
 
@@ -51,7 +54,6 @@ const setBuildGradleConfig = (buildGradleContent: string): string => {
           url 'https://raw.githubusercontent.com/idnow/de.idnow.android/master'
         }
   `
-
   return mergeContents({
     src: withDependencySubstitution,
     newSrc: newMavenRepositories,
