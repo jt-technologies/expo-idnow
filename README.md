@@ -1,4 +1,4 @@
-# j-tec/expo-idnow
+# @jt-technologies/expo-idnow
 
 IDnow Video Ident Expo Module
 
