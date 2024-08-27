@@ -77,4 +77,7 @@ data class ExpoIDnowOptions(
     @Field val language: String = "de",
     @Field val connectionType: ExpoIDnowConnectionType = ExpoIDnowConnectionType.WEBSOCKET,
     @Field val environment: ExpoIDnowEnvironment = ExpoIDnowEnvironment.NOT_DEFINED,
+    @Field val showErrorSuccessScreen: Boolean = true,
+    @Field val showVideoOverviewCheck: Boolean = true,
+    @Field val calledFromIDnowApp: Boolean = true,
 ) : Record
