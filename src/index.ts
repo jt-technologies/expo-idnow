@@ -52,6 +52,9 @@ export type IDnowOptions = {
   language?: string
   connectionType?: IDnowConnectionType
   environment?: IDnowEnvironment
+  showErrorSuccessScreen?: boolean
+  showVideoOverviewCheck?: boolean
+  calledFromIDnowApp?: boolean
 }
 
 export type IDnowResultType =

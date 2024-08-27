@@ -97,4 +97,7 @@ struct ExpoIDnowOptions: Record {
 	@Field var language: String = "de"
 	@Field var connectionType: ExpoIDnowConnectionType = .websocket
 	@Field var environment: ExpoIDnowEnvironment = .notDefined
+	@Field var showErrorSuccessScreen: Bool = true
+	@Field var showVideoOverviewCheck: Bool = true
+	@Field var calledFromIDnowApp: Bool = true
 }

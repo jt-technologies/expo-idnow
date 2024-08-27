@@ -27,6 +27,11 @@ class ExpoIDnowModule : Module() {
                     activity
                 )
                 IDnowSDK.setEnvironment(options.environment.toIDnowEnvironment());
+                IDnowSDK.setShowErrorSuccessScreen(options.showErrorSuccessScreen, activity)
+                IDnowSDK.setShowVideoOverviewCheck(options.showVideoOverviewCheck, activity)
+                if(options.calledFromIDnowApp) {
+                    IDnowSDK.calledFromIDnowApp(activity)
+                }
 
                 IDnowSDK.getInstance().start(IDnowSDK.getTransactionToken()) { result, _ ->
                     promise.resolve(ExpoIDnowResponse(result).toJsonString())
