@@ -41,6 +41,14 @@ buildscript {
             ext.safeExtGet("idnowVersion", "8.4.0")
         }
     }
+
+    ext.getBouncyCastleVersion = {
+        if (ext.has("bcprovVersion")) {
+            ext.bcprovVersion()
+        } else {
+            ext.safeExtGet("bcprovVersion", "1.78.1")
+        }
+    }
 }
 
 android {
@@ -97,4 +105,7 @@ dependencies {
     implementation project(':expo-modules-core')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${getKotlinVersion()}"
     implementation "de.idnow.sdk:idnow-android-sdk:${getIDnowVersion()}"
+    implementation "org.bouncycastle:bcprov-jdk15to18:${getBouncyCastleVersion()}"
+    implementation "org.bouncycastle:bctls-jdk15to18:${getBouncyCastleVersion()}"
+    implementation "org.bouncycastle:bcutil-jdk15to18:${getBouncyCastleVersion()}"
 }
