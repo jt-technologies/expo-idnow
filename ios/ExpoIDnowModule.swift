@@ -15,6 +15,8 @@ public class ExpoIDnowModule: Module {
 				settings.userInterfaceLanguage = options.language
 				settings.connectionType = options.connectionType.toIDnowConnectionType()
 				settings.environment = options.environment.toIDnowEnvironment()
+				settings.showErrorSuccessScreen = options.showErrorSuccessScreen
+				settings.showVideoOverviewCheck = options.showVideoOverviewCheck
 				
 				let controller = IDnowController(settings: settings)
 				controller.initialize(completionBlock: { _, error, cancelled in
