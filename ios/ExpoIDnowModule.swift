@@ -27,7 +27,7 @@ public class ExpoIDnowModule: Module {
 					}
 					
 					if cancelled {
-						promise.resolve(ExpoIDnowResponse(result: "CANCELLED").toJsonString())
+						promise.resolve(ExpoIDnowResponse(result: "CANCELED").toJsonString())
 						return
 					}
 					
@@ -39,7 +39,7 @@ public class ExpoIDnowModule: Module {
 						}
 						
 						if cancelled {
-							promise.resolve(ExpoIDnowResponse(result: "CANCELLED").toJsonString())
+							promise.resolve(ExpoIDnowResponse(result: "CANCELED").toJsonString())
 							return
 						}
 						
