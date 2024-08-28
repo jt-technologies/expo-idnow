@@ -21,34 +21,27 @@ public class ExpoIDnowModule: Module {
 				let controller = IDnowController(settings: settings)
 				controller.initialize(completionBlock: { _, error, cancelled in
 					if error != nil {
-						let message = error?.localizedDescription
-						promise.resolve(ExpoIDnowResponse(result: "FAILED", error: message).toJsonString())
-						return
+						return promise.reject(error ?? Exception(name: "Initialize", description: "IDnow Initialize Error"))
 					}
 					
 					if cancelled {
-						promise.resolve(ExpoIDnowResponse(result: "CANCELED").toJsonString())
-						return
+						return promise.resolve(ExpoIDnowResponse(result: "CANCELED").toJsonString())
 					}
 					
 					controller.startIdentification(from: rootViewController, withCompletionBlock: { _, error, cancelled in
 						if error != nil {
-							let message = error?.localizedDescription
-							promise.resolve(ExpoIDnowResponse(result: "FAILED", error: message).toJsonString())
-							return
+							return promise.reject(error ?? Exception(name: "StartIdent", description: "IDnow Start Ident Error"))
 						}
 						
 						if cancelled {
-							promise.resolve(ExpoIDnowResponse(result: "CANCELED").toJsonString())
-							return
+							return promise.resolve(ExpoIDnowResponse(result: "CANCELED").toJsonString())
 						}
 						
-						promise.resolve(ExpoIDnowResponse(result: "SUCCEED").toJsonString())
+						return promise.resolve(ExpoIDnowResponse(result: "SUCCEED").toJsonString())
 					})
 				})
-
 			} else {
-				promise.resolve(ExpoIDnowResponse(result: "UNKNOWN").toJsonString())
+				return promise.reject(Exception(name: "General", description: "Failed to resolve current Expo Activity"))
 			}
 		}
 	}
