@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.static_framework = true
 
   s.dependency 'ExpoModulesCore'
-  s.dependency 'IDnowSDK', '~> 8.4.0'
+  s.dependency 'IDnowSDK', '~> 9.6.3'
 
   s.source_files = "**/*.{h,m,swift}"
 end
