@@ -38,7 +38,7 @@ buildscript {
         if (ext.has("idnowVersion")) {
             ext.idnowVersion()
         } else {
-            ext.safeExtGet("idnowVersion", "8.4.0")
+            ext.safeExtGet("idnowVersion", "9.6.2")
         }
     }
 
@@ -54,7 +54,7 @@ buildscript {
 android {
     namespace "com.jtec.idnow"
 
-    compileSdk safeExtGet("compileSdkVersion", 34)
+    compileSdk safeExtGet("compileSdkVersion", 35)
     // Use NDK version >23 which has both M1 support and is the side-by-side NDK version from AGP.
     ndkVersion safeExtGet("ndkVersion", "23.1.7779620")
 
@@ -62,17 +62,23 @@ android {
         versionCode 1
         versionName "0.1.0"
         minSdkVersion safeExtGet("minSdkVersion", 23)
-        targetSdkVersion safeExtGet("targetSdkVersion", 34)
+        targetSdkVersion safeExtGet("targetSdkVersion", 35)
+    }
+
+    packagingOptions {
+        jniLibs {
+          useLegacyPackaging true
+        }
     }
 
     def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION
     if (agpVersion.tokenize('.')[0].toInteger() < 8) {
         compileOptions {
-            sourceCompatibility JavaVersion.VERSION_11
-            targetCompatibility JavaVersion.VERSION_11
+            sourceCompatibility JavaVersion.VERSION_17
+            targetCompatibility JavaVersion.VERSION_17
         }
         kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_11.majorVersion
+            jvmTarget = JavaVersion.VERSION_17.majorVersion
         }
     }
 
