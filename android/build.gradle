@@ -49,10 +49,6 @@ buildscript {
             ext.safeExtGet("bcprovVersion", "1.78.1")
         }
     }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.6.0'
-    }
 }
 
 android {
